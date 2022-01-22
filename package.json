@@ -1,0 +1,20 @@
+{
+  "name": "@sscovil/random",
+  "version": "1.0.0",
+  "description": "An assortment of useful random number functions.",
+  "main": "src/random.js",
+  "repository": "https://github.com/sscovil/random",
+  "author": "Shaun Scovil <sscovil@gmail.com>",
+  "license": "MITNFA",
+  "keywords": ["database", "migrate", "migration", "sql"],
+  "type": "module",
+  "scripts": {
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest"
+  },
+  "jest": {
+    "transform": {}
+  },
+  "devDependencies": {
+    "jest": "^27.4.7"
+  }
+}
