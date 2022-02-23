@@ -1,9 +1,9 @@
 {
   "name": "@sscovil/random",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "An assortment of useful random number functions.",
   "main": "random.js",
-  "files": ["lib/**/*"],
+  "files": ["dist/**/*"],
   "repository": "https://github.com/sscovil/random",
   "homepage": "https://github.com/sscovil/random#readme",
   "bugs": "https://github.com/sscovil/random/issues",
