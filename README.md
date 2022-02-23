@@ -31,7 +31,7 @@ const isValid = (color) => !!String(color).match(/^#[0-9A-Fa-f]{6}$/);
 expect(isValid(color)).toBe(true);
 ```
 
-### random.distribute(length, value, min)
+### random.distribute(length, value, min, max)
 
 Given a desired array `length` and an integer `value`, returns an array of integers randomly distributed among its
 elements.
@@ -78,6 +78,23 @@ expect(sumArray(result)).toBe(length * min);
 
 for (let i = 0; i < result.length; i++) {
     expect(result[i]).toBe(min);
+}
+```
+
+Accepts an optional fourth parameter to specify a `max` value for each element in the array.
+
+```javascript
+const length = 10;
+const value = 25;
+const min = 1;
+const max = 5;
+const result = random.distribute(length, value, min, max); // returns an array like [2, 2, 3, 3, 5, 4, 1, 1, 2, 2]
+const sumArray = (arr) => arr.reduce((a, b) => a + b, 0);
+
+expect(sumArray(result)).toBe(value);
+for (let j = 0; j < result.length; j++) {
+    expect(result[j]).toBeGreaterThanOrEqual(min);
+    expect(result[j]).toBeLessThanOrEqual(max);
 }
 ```
 

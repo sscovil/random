@@ -7,7 +7,6 @@ describe("colorHex", () => {
         // when dealing with random numbers, do it 100 times to be sure
         for (let i = 0; i < 100; i++) {
             const color = random.color();
-            console.log(String(color).match(/^#[0-9A-Fa-f]{6}$/));
             expect(isValid(color)).toBe(true);
         }
     });
@@ -48,6 +47,22 @@ describe("distribute", () => {
         }
     });
 
+    test("returned array elements have a value between the third and fourth arguments", () => {
+        const length = 10
+        const value = 25
+        const min = 1
+        const max = 5
+        // when dealing with random numbers, do it 100 times to be sure
+        for (let i = 0; i < 100; i++) {
+            const result = random.distribute(length, value, min, max);
+            expect(sumArray(result)).toBe(value);
+            for (let j = 0; j < result.length; j++) {
+                expect(result[j]).toBeGreaterThanOrEqual(min);
+                expect(result[j]).toBeLessThanOrEqual(max);
+            }
+        }
+    });
+
     test("returns an array with a single element equal to value if length < 1", () => {
         const length = 0;
         const value = 10;
@@ -66,6 +81,19 @@ describe("distribute", () => {
         expect(result.length).toBe(1);
         expect(result[0]).toBe(min);
     });
+
+    test("returns an array with all elements equal to max if value > max * length", () => {
+        const length = 5;
+        const value = 100;
+        const min = 1;
+        const max = 5;
+        const result = random.distribute(length, value, min, max);
+        expect(Array.isArray(result)).toBe(true);
+        expect(result.length).toBe(length);
+        for (let i = 0; i < length; i++) {
+            expect(result[i]).toBe(max);
+        }
+    })
 });
 
 describe("pick", () => {

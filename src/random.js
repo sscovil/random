@@ -18,9 +18,10 @@ export function color() {
  * @param length {number} Length of desired array
  * @param value {number} Integer to divide and distribute randomly among array elements
  * @param min {number} Minimum value for each element in the array
+ * @param max {number} Maximum value for each element in the array
  * @returns {number[]} Array of integers, randomly distributed among elements
  */
-export function distribute(length, value, min = 0) {
+export function distribute(length, value, min = 0, max = 0) {
     if (length <= 1) {
         return [Math.max(value, min)];
     }
@@ -31,10 +32,22 @@ export function distribute(length, value, min = 0) {
         return result.fill(min);
     }
 
+    if (max && value > length * max) {
+        return result.fill(max);
+    }
+
     for (let i = 0; i < length; i++) {
-        const isLast = i === length - 1;
-        const max = value - min * (length - i);
-        result[i] = isLast ? value : integer(min, max);
+        let spaceRemaining = length - i
+        let isLast = spaceRemaining === 1;
+        let minRandom = min
+        let maxRandom = value - min * spaceRemaining
+
+        if (max) {
+            minRandom = Math.floor(value / spaceRemaining)
+            maxRandom = Math.min(max + 1, maxRandom)
+        }
+
+        result[i] = isLast ? value : integer(minRandom, maxRandom);
         value -= result[i];
     }
 
