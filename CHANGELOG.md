@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.3] - 2022-02-23
+### Added
+- TypeScript definitions file (.d.ts) in dist directory.
+- Reference to TypeScript definitions file in package.json.
+
+### Changed
+- Moved unit test file from src to test directory.
+
+### Removed
+- Unit test file from dist directory.
+
 ## [1.2.2] - 2022-02-23
 ### Fixed
 - Missing dist directory reference for `main` in package.json.

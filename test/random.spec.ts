@@ -1,4 +1,4 @@
-import * as random from './random'
+import * as random from '../src/random'
 
 describe('color', () => {
   const isValid = (color: string): boolean =>
