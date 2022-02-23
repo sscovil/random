@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.2] - 2022-02-23
+### Fixed
+- Missing dist directory reference for `main` in package.json.
+
 ## [1.2.1] - 2022-02-23
 ### Fixed
 - Incorrect dist directory reference for `files` in package.json.
