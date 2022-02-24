@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+N/A
+
+## [1.3.0] - 2022-02-23
+### Added
+- Random function: `shuffle`.
+
+### Changed
+- Modified `sample` function to use `shuffle` internally (same logic).
+
 ## [1.2.3] - 2022-02-23
 ### Added
 - TypeScript definitions file (.d.ts) in dist directory.

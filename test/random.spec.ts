@@ -68,7 +68,6 @@ describe('distribute', () => {
     const length = 0
     const value = 10
     const result = random.distribute(length, value)
-    expect(Array.isArray(result)).toBe(true)
     expect(result.length).toBe(1)
     expect(result[0]).toBe(value)
   })
@@ -78,7 +77,6 @@ describe('distribute', () => {
     const value = 10
     const min = 20
     const result = random.distribute(length, value, min)
-    expect(Array.isArray(result)).toBe(true)
     expect(result.length).toBe(1)
     expect(result[0]).toBe(min)
   })
@@ -89,7 +87,6 @@ describe('distribute', () => {
     const min = 1
     const max = 5
     const result = random.distribute(length, value, min, max)
-    expect(Array.isArray(result)).toBe(true)
     expect(result.length).toBe(length)
     for (let i = 0; i < length; i++) {
       expect(result[i]).toBe(max)
@@ -143,15 +140,11 @@ describe('sample', () => {
   test('returns a random sample of elements from a given array', () => {
     const arr = ['north', 'east', 'south', 'west']
     const size = 2
-    // when dealing with random numbers, do it 100 times to be sure
-    for (let i = 0; i < 100; i++) {
-      const result = random.sample(arr, size)
-      expect(Array.isArray(result)).toBe(true)
-      expect(result.length).toBe(size)
-      expect(arr).toContain(result[0])
-      expect(arr).toContain(result[1])
-      expect(result[0]).not.toBe(result[1])
-    }
+    const result = random.sample(arr, size)
+    expect(result.length).toBe(size)
+    expect(arr).toContain(result[0])
+    expect(arr).toContain(result[1])
+    expect(result[0]).not.toBe(result[1])
   })
 
   test('returns rearranged version of array if size >= array length', () => {
@@ -160,7 +153,6 @@ describe('sample', () => {
     for (let i = 0; i < 2; i++) {
       const size = arr.length + i
       const result = random.sample(arr, size)
-      expect(Array.isArray(result)).toBe(true)
       expect(result.length).toBe(arr.length) // ensure result is not larger than original array
       expect(result.join()).not.toBe(arr.join()) // ensure result is shuffled
       expect(result.sort()).toEqual(arr.sort()) // ensure all values are present
@@ -194,6 +186,32 @@ describe('sample', () => {
     const arr = [1, 2, 3]
     const size = 0
     const result = random.sample(arr, size)
+    expect(result).toEqual([])
+  })
+})
+
+describe('shuffle', () => {
+  test('returns a copy of a given array with its elements in a random order', () => {
+    const arr = []
+    for (let i = 0; i < 100; i++) {
+      arr.push(i) // generate an array with 100 unique elements
+    }
+    const result = random.shuffle(arr)
+    expect(result.length).toBe(arr.length)
+    expect(result).not.toEqual(arr)
+    expect(result.sort()).toEqual(arr.sort())
+  })
+
+  test('returns an empty array if first argument is not an array', () => {
+    const arr = { one: 1, two: 2, three: 3 }
+    // @ts-ignore
+    const result = random.shuffle(arr)
+    expect(result).toEqual([])
+  })
+
+  test('returns an empty array if first argument is an empty array', () => {
+    const arr: any[] = []
+    const result = random.shuffle(arr)
     expect(result).toEqual([])
   })
 })

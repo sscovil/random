@@ -58,12 +58,15 @@ export function integer(min: number, max: number): number {
 }
 
 export function sample(arr: any[], size: number): any[] {
-  if (
-    !Array.isArray(arr) ||
-    !arr.length ||
-    !Number.isFinite(size) ||
-    size < 1
-  ) {
+  if (!Number.isFinite(size) || size < 1) {
+    return []
+  }
+
+  return shuffle(arr).slice(0, size)
+}
+
+export function shuffle(arr: any[]): any[] {
+  if (!Array.isArray(arr) || !arr.length) {
     return []
   }
 
@@ -77,5 +80,5 @@ export function sample(arr: any[], size: number): any[] {
     shuffled[i] = temp
   }
 
-  return shuffled.slice(0, size)
+  return shuffled
 }

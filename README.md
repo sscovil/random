@@ -1,6 +1,6 @@
 # Random
 
-An assortment of useful random number functions.
+An assortment of useful randomness functions, with TypeScript type declarations.
 
 ## Installation
 
@@ -143,7 +143,7 @@ expect(result).toBeLessThanOrEqual(max);
 
 ### random.sample(arr, size)
 
-Returns a random sample of elements from a given array.
+Returns a random sample of elements from a given array. This uses the `shuffle` function (see below) internally.
 
 ```javascript
 const arr = ["north", "east", "south", "west"];
@@ -176,6 +176,22 @@ expect(random.sample([], 2)).toEqual([]);
 expect(random.sample({ foo: 1, bar: 2, baz: 3 }, 2)).toEqual([]);
 expect(random.sample([1, 2, 3], "2")).toEqual([]);
 expect(random.sample([1, 2, 3], -2)).toEqual([]);
+```
+
+### random.shuffle(arr)
+
+Returns a new array with all the elements of the original array, in a random order.
+
+```javascript
+const arr = []
+for (let i = 0; i < 100; i++) {
+  arr.push(i) // generate an array with 100 unique elements
+}
+const result = random.shuffle(arr)
+
+expect(result.length).toBe(arr.length)
+expect(result).not.toEqual(arr)
+expect(result.sort()).toEqual(arr.sort())
 ```
 
 ## Running Tests
