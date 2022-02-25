@@ -5,9 +5,9 @@ An assortment of useful randomness functions, with TypeScript type declarations.
 ## Installation
 
 ```shell
-yarn add @sscovil/migrate
+yarn add @sscovil/random
 # OR
-npm install @sscovil/migrate
+npm install @sscovil/random
 ```
 
 ## Usage
@@ -33,8 +33,8 @@ expect(isValid(color)).toBe(true);
 
 ### random.distribute(length, value, min, max)
 
-Given a desired array `length` and an integer `value`, returns an array of integers randomly distributed among its
-elements.
+Given a desired array `length` and an integer `value`, returns an array of integers that add up to `value` randomly
+distributed among its elements.
 
 ```javascript
 const length = 5;
