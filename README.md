@@ -1,203 +1,320 @@
-# Random
+# Grid
 
-An assortment of useful randomness functions, with TypeScript type declarations.
+The `Grid` object provides a 2D interface for a flat array, so elements can be accessed using `x` and `y` coordinates.
+Helper functions have been provided to convert an array index to [GridCoords](#GridCoords) and vice versa; and items can
+be retrieved or added to the array using either of the two.
+
+Additionally, `Grid` provides methods for retrieving all coordinates, indices, or items adjacent to a given index or
+coordinate, based on the number of `rows` and `cols` it was initialized with.
+
+This package includes TypeScript type declarations, has full test coverage, and has no dependencies.
 
 ## Installation
 
+### Yarn
+
 ```shell
-yarn add @sscovil/random
-# OR
-npm install @sscovil/random
+yarn add @sscovil/grid
+```
+
+### NPM
+
+```shell
+npm install @sscovil/grid
 ```
 
 ## Usage
 
-```javascript
-// ES Module Syntax
-import random from "@sscovil/random";
+### ES Module Syntax
 
-// CommonJS Syntax
-const random = require("@sscovil/random");
+```typescript
+import Grid from '@sscovil/grid'
 ```
 
-### random.color()
+### CommonJS Syntax
 
-Returns a random hex color (e.g. "#C2123B", "#A2FF9A", "#0DC43F").
-
-```javascript
-const color = random.color();
-const isValid = (color) => !!String(color).match(/^#[0-9A-Fa-f]{6}$/);
-
-expect(isValid(color)).toBe(true);
+```typescript
+const Grid = require('@sscovil/grid')
 ```
 
-### random.distribute(length, value, min, max)
+### Examples
 
-Given a desired array `length` and an integer `value`, returns an array of integers that add up to `value` randomly
-distributed among its elements.
+Say you want a grid with three columns and four rows, with cells containing letters `A` through `L`.
 
-```javascript
-const length = 5;
-const value = 10;
-const result = random.distribute(length, value); // returns an array like [0, 3, 1, 5, 1]
-const sumArray = (arr) => arr.reduce((a, b) => a + b, 0);
+To create this as a `Grid` object, you can do the following:
 
-expect(result.length).toBe(length);
-expect(sumArray(result)).toBe(value);
-```
+```typescript
+const rows = 4
+const cols = 3
+const items: string[] = new Array(rows * cols)
 
-Accepts an optional third argument to specify a `min` value for each element in the array (default is `0`).
-
-```javascript
-const length = 5;
-const value = 100;
-const min = 10;
-const result = random.distribute(length, value, min); // returns an array like [11, 33, 24, 17, 15]
-const sumArray = (arr) => arr.reduce((a, b) => a + b, 0);
-
-expect(result.length).toBe(length);
-expect(sumArray(result)).toBe(value);
-
-for (let i = 0; i < result.length; i++) {
-    expect(result[i]).toBeGreaterThanOrEqual(min);
+for (let i = 0; i < items.length; i++) {
+  items[i] = String.fromCharCode(65 + i) // set array values to letters A through L
 }
+
+const grid = new Grid<string>(rows, cols, items)
 ```
 
-Ignores `value` if it is less than `length * min`, and returns an array of `length` with each element set to the
-value of `min`.
+In the `Grid` object, the `x` coordinate would be `0` for the first column, `1`, for the second column, and `2` for the
+third column. Likewise, the `y` coordinate would be `0` for the first row, `1` for the second row, `2` for the third
+row, and `3` for the fourth row.
 
-```javascript
-const length = 5;
-const value = 10; // this is less that length * min, so it will be ignored
-const min = 10;
-const result = random.distribute(length, value, min); // returns [10, 10, 10, 10, 10]
-const sumArray = (arr) => arr.reduce((a, b) => a + b, 0);
+|   | `0` | `1` | `2` |
+|---|---|---|---|
+| `0` | A | B | C |
+| `1` | D | E | F |
+| `2` | G | H | I |
+| `3` | J | K | L |
 
-expect(result.length).toBe(length);
-expect(sumArray(result)).toBe(length * min);
+To get grid coordinates of `E`:
 
-for (let i = 0; i < result.length; i++) {
-    expect(result[i]).toBe(min);
+```typescript
+const xy = grid.coordsOf('E')
+
+expect(xy).toEqual({ x: 1, y: 1 })
+```
+
+To get the array index of `E`:
+
+```typescript
+const index = grid.indexOf('E')
+
+expect(index).toEqual(4)
+```
+
+To get `E` using its grid coordinates:
+
+```typescript
+const valueAtCoords = grid.get({ x: 1, y: 1 })
+
+expect(valueAtCoords).toBe('E')
+```
+
+To get `E` using its array index:
+
+```typescript
+const valueAtIndex = grid.get(4)
+
+expect(valueAtIndex).toBe('E')
+```
+
+To change the value of `E` using its grid coordinates:
+
+```typescript
+grid.set({ x: 1, y: 1 }, 'e')
+
+expect(grid.get(4)).toBe('e')
+expect(grid.get({ x: 1, y: 1 })).toBe('e')
+```
+
+To change the value of `E` using its array index:
+
+```typescript
+grid.set(4, 'e')
+
+expect(grid.get(4)).toBe('e')
+expect(grid.get({ x: 1, y: 1 })).toBe('e')
+```
+
+To get all the values adjacent to `E` by its coordinate:
+
+```typescript
+const adjacentByCoords = grid.getAdjacent({ x: 1, y: 1 })
+
+expect(adjacentByCoords).toEqual(['A', 'B', 'C', 'D', 'F', 'G', 'H', 'I'])
+```
+
+To get all the items adjacent to `E` by its array index:
+
+```typescript
+const adjacentByIndex = grid.getAdjacent(4)
+
+expect(adjacentByIndex).toEqual(['A', 'B', 'C', 'D', 'F', 'G', 'H', 'I'])
+```
+
+To get all adjacent coordinates of `E` by its grid coordinate:
+
+```typescript
+const adjacentCoords = grid.getAdjacentCoords({ x: 1, y: 1 })
+
+expect(adjacentCoords).toEqual([
+  { x: 0, y: 0 },
+  { x: 1, y: 0 },
+  { x: 2, y: 0 },
+  { x: 0, y: 1 },
+  { x: 2, y: 1 },
+  { x: 0, y: 2 },
+  { x: 1, y: 2 },
+  { x: 2, y: 2 },
+])
+```
+
+To get all adjacent indices of `E` by its array index:
+
+```typescript
+const adjacentIndices = grid.getAdjacentIndices(4)
+
+expect(adjacentIndices).toEqual([0, 1, 2, 3, 5, 6, 7, 8])
+```
+
+To get the coordinate of `E` by its array index:
+
+```typescript
+const xy = grid.getCoords(4)
+const invalidXY = grid.getCoords(40)
+
+expect(xy).toEqual({ x: 1, y: 1 })
+expect(invalidXY).toEqual({ x: -1, y: -1 })
+```
+
+To get the index of `E` by its grid coordinate:
+
+```typescript
+const index = grid.getIndex({ x: 1, y: 1 })
+const invalidIndex = grid.getIndex({ x: 10, y: 10 })
+
+expect(index).toBe(4)
+expect(invalidIndex).toBe(-1)
+```
+
+To check if a coordinate is within the range of the grid:
+
+```typescript
+const validXY = grid.isValidCoords({ x: 1, y: 1 })
+const invalidXY = grid.isValidCoords({ x: 10, y: 10 })
+
+expect(validXY).toBe(true)
+expect(invalidXY).toBe(false)
+```
+
+To check if an array index is within the range of the grid:
+
+```typescript
+const validIndex = grid.isValidIndex(4)
+const invalidIndex = grid.isValidIndex(40)
+
+expect(validIndex).toBe(true)
+expect(invalidIndex).toBe(false)
+```
+
+The `items` property is the array used to store data in the grid, and can be directly accessed:
+
+```typescript
+const allItems = grid.items.map((item) => item)
+const notEmpty = grid.items.filter((item) => item !== undefined)
+```
+
+Avoid directly modifying the `items` array; use the `get` and `set` methods instead.
+
+## API Reference
+
+### Constructor
+
+`Grid()`
+
+Creates a new `Grid` object. Requires two numeric arguments: `rows` and `cols`. Accepts an array as an optional third
+argument. If provided, the array elements will be used to populate the `items` array of the `Grid` instance.
+
+### Static Methods
+
+`Grid.isGridCoords()`
+
+Returns `true` if the argument implements the [GridCoords](#GridCoords) interface, or `false` otherwise.
+
+`Grid.isEqualCoords()`
+
+Returns `true` if both arguments implement the [GridCoords](#GridCoords) interface and have equal `x` and `y` values.
+
+### Instance Properties
+
+`Grid.prototype.rows`
+
+Read-only value that reflects the number of rows in the grid.
+
+`Grid.prototype.cols`
+
+Read-only value that reflects the number of columns in the grid.
+
+`Grid.prototype.size`
+
+Computed value that equals the number of rows multiplied by the number of columns in the grid.
+
+`Grid.prototype.items`
+
+Array used to store items in the grid. Avoid directly modifying the array; use the `get` and `set` methods instead.
+
+### Instance Methods
+
+`Grid.prototype.coordsOf()`
+
+Returns the grid coordinate of the item provided as an argument if present in the grid, or `{ x: -1, y: -1 }` otherwise.
+This uses [Array.prototype.indexOf()][1] under the hood, so it behaves the same way.
+
+`Grid.prototype.get()`
+
+Returns the item located at the grid coordinate or array index provided as an argument.
+
+`Grid.prototype.getAdjacent()`
+
+Returns an array of up to eight items located around the grid coordinate or array index provided as an argument. Items
+at the corners of a grid will only have three adjacent items; and items along the edges of the grid will only have five.
+
+`Grid.prototype.getAdjacentCoords()`
+
+Returns an array of up to eight grid coordinates adjacent to the coordinate provided as an argument. Items at the
+corners of a grid will only have three adjacent coordinates; and items along the edges of the grid will only have five.
+
+`Grid.prototype.getAdjacentIndices()`
+
+Returns an array of up to eight array indices adjacent to the index provided as an argument. Items at the corners of a
+grid will only have three adjacent indices; and items along the edges of the grid will only have five.
+
+`Grid.prototype.getCoords()`
+
+Returns the grid coordinate of the array index provided as an argument if valid, or `{ x: -1, y: -1 }` otherwise.
+
+`Grid.prototype.getIndex()`
+
+Returns the array index of the grid coordinate provided as an argument if valid, or `-1` otherwise.
+
+`Grid.prototype.indexOf()`
+
+Returns the array index of the item provided as an argument if present in the grid, or `-1` otherwise. This uses
+[Array.prototype.indexOf()][1] under the hood, so it behaves the same way.
+
+`Grid.prototype.isValidCoords()`
+
+Returns `true` if the argument implements the [GridCoords](#GridCoords) interface and is within the range of the grid
+`items` array, or `false` otherwise.
+
+`Grid.prototype.isValidIndex()`
+
+Returns `true` if the argument is within the range of the grid `items` array.
+
+`Grid.prototype.set()`
+
+Sets the value of the item located at the grid coordinate or array index provided as the first argument, using the value
+of the second argument.
+
+### Interfaces
+
+`GridCoords`
+
+Any object that contains `x` and `y` properties with numeric values implements the `GridCoords` interface.
+
+```typescript
+interface GridCoords {
+  x: number
+  y: number
 }
-```
-
-Accepts an optional fourth parameter to specify a `max` value for each element in the array.
-
-```javascript
-const length = 10;
-const value = 25;
-const min = 1;
-const max = 5;
-const result = random.distribute(length, value, min, max); // returns an array like [2, 2, 3, 3, 5, 4, 1, 1, 2, 2]
-const sumArray = (arr) => arr.reduce((a, b) => a + b, 0);
-
-expect(sumArray(result)).toBe(value);
-for (let j = 0; j < result.length; j++) {
-    expect(result[j]).toBeGreaterThanOrEqual(min);
-    expect(result[j]).toBeLessThanOrEqual(max);
-}
-```
-
-### random.pick(arr)
-
-Returns a random element from a given array.
-
-```javascript
-const arr = ["foo", "bar", "baz"];
-const result = random.pick(arr);
-
-expect(arr).toContain(result);
-```
-
-Works with an array of objects, or any other data type.
-
-```javascript
-const arr = [{ name: "foo" }, { name: "bar" }, { name: "baz" }];
-const result = random.pick(arr);
-
-expect(arr).toContain(result);
-```
-
-Returns `null` if the value passed in is an empty array, or is not an array.
-
-```javascript
-expect(random.pick([])).toBe(null);
-expect(random.pick({ name: "foo" })).toBe(null);
-expect(random.pick("foobar")).toBe(null);
-expect(random.pick(123)).toBe(null);
-```
-
-### random.integer(min, max)
-
-Returns an integer between `min` and `max` (inclusive).
-
-```javascript
-const min = 1;
-const max = 10;
-const result = random.integer(min, max);
-
-expect(Number.isInteger(result)).toBe(true);
-expect(result).toBeGreaterThanOrEqual(min);
-expect(result).toBeLessThanOrEqual(max);
-```
-
-### random.sample(arr, size)
-
-Returns a random sample of elements from a given array. This uses the `shuffle` function (see below) internally.
-
-```javascript
-const arr = ["north", "east", "south", "west"];
-const size = 2;
-const result = random.sample(arr, size);
-
-expect(Array.isArray(result)).toBe(true);
-expect(result.length).toBe(size);
-expect(arr).toContain(result[0]);
-expect(arr).toContain(result[1]);
-expect(result[0]).not.toBe(result[1]); // result will not contain duplicate values
-```
-
-Returns a rearranged version of `arr` if `size >= arr.length`.
-
-```javascript
-const arr = ["n", "ne", "e", "se", "s", "sw", "w", "nw"];
-const size = arr.length;
-const result = random.sample(arr, size);
-
-expect(Array.isArray(result)).toBe(true);
-expect(result.join()).not.toBe(arr.join()); // new array elements are in a different order
-expect(result.sort()).toEqual(arr.sort()); // all values from orginal array are present
-```
-
-Returns an empty array if `arr` or `size` are invalid.
-
-```javascript
-expect(random.sample([], 2)).toEqual([]);
-expect(random.sample({ foo: 1, bar: 2, baz: 3 }, 2)).toEqual([]);
-expect(random.sample([1, 2, 3], "2")).toEqual([]);
-expect(random.sample([1, 2, 3], -2)).toEqual([]);
-```
-
-### random.shuffle(arr)
-
-Returns a new array with all the elements of the original array, in a random order.
-
-```javascript
-const arr = []
-for (let i = 0; i < 100; i++) {
-  arr.push(i) // generate an array with 100 unique elements
-}
-const result = random.shuffle(arr)
-
-expect(result.length).toBe(arr.length)
-expect(result).not.toEqual(arr)
-expect(result.sort()).toEqual(arr.sort())
 ```
 
 ## Running Tests
 
 ```shell
-yarn run test
+yarn test
 # OR
 npm test
 ```
+
+[1]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/indexOf

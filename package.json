@@ -1,55 +1,30 @@
 {
-  "name": "@sscovil/random",
-  "version": "1.3.1",
-  "description": "An assortment of useful randomness functions, with TypeScript type declarations.",
-  "repository": "https://github.com/sscovil/random",
-  "homepage": "https://github.com/sscovil/random#readme",
-  "bugs": "https://github.com/sscovil/random/issues",
+  "name": "@sscovil/grid",
+  "version": "1.0.0",
+  "description": "The Grid object provides a 2D interface for a flat array, so elements can be accessed using X and Y coordinates.",
+  "repository": "https://github.com/sscovil/grid",
+  "homepage": "https://github.com/sscovil/grid#readme",
+  "bugs": "https://github.com/sscovil/grid/issues",
   "author": "Shaun Scovil <sscovil@gmail.com>",
   "license": "MITNFA",
   "keywords": [
-    "random",
-    "utility",
-    "number",
+    "grid",
     "array",
-    "color",
-    "distribute",
-    "shuffle",
-    "sample",
+    "map",
+    "game",
+    "board",
+    "coordinates",
     "typescript"
   ],
   "type": "module",
-  "main": "dist/random.js",
-  "types": "dist/random.d.ts",
+  "main": "dist/grid.js",
+  "types": "dist/grid.d.ts",
   "files": ["dist/**/*"],
   "scripts": {
     "build": "tsc",
     "format": "prettier --write --list-different \"src/**/*.ts\"",
     "lint": "tslint -p tsconfig.json",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest --no-cache"
-  },
-  "jest": {
-    "extensionsToTreatAsEsm": [
-      ".ts"
-    ],
-    "globals": {
-      "ts-jest": {
-        "useESM": true
-      }
-    },
-    "moduleNameMapper": {
-      "^(\\.{1,2}/.*)\\.js$": "$1"
-    },
-    "modulePathIgnorePatterns": [
-      "/dist/"
-    ],
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "/dist/"
-    ],
-    "transform": {
-      "\\.[jt]sx?$": "ts-jest"
-    }
   },
   "devDependencies": {
     "@types/jest": "^27.4.1",
