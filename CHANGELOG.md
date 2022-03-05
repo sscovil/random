@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 N/A
 
-## [1.3.1] - 2022-02-23
+## [1.3.1] - 2022-02-25
 ### Fixed
 - Name of package in installation instructions in README.md 🤦.
 
